@@ -1,0 +1,159 @@
+<html lang="pt-br"> 
+<head>
+	<meta charset="UTF-8">
+    <title>MATERIAL DESIGN - SLIDE TAB</title>  
+    <link href='https://fonts.googleapis.com/css?family=Roboto:400,300,500,700' 
+    rel='stylesheet' type='text/css'>
+    <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script> 
+    <style>
+
+	body {
+	  font-family: 'roboto', sans-serif;
+	  background: #fafafa;
+	  box-sizing: border-box;
+	}
+
+	ul {
+	  font-size: 0;
+	  position: relative;
+	  padding: 0;
+	  max-width: 480px;
+	  margin: 60px auto;
+	  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.16);
+	  -webkit-user-select: none;
+	  -moz-user-select: none;
+	  -ms-user-select: none;
+	  user-select: none;  	  
+	}
+
+	li {
+	  display: inline-block;
+	  width: 160px;
+	  height: 60px;
+	  background: #00BCD4;
+	  font-size: 16px;
+	  text-align: center;
+	  line-height: 60px;
+	  color: #fff;
+	  text-transform: uppercase;
+	  position: relative;
+	  overflow: hidden;
+	  cursor: pointer;
+	}
+
+	.slider {
+	  display: block;
+	  position: absolute;
+	  bottom: 0;
+	  left: 0;
+	  height: 4px;
+	  background: #FFFF98;
+	  -webkit-transition: all 0.5s;
+	  transition: all 0.5s;
+	}
+
+	/* Efeito Ripple */
+	.ripple {
+	  width: 0;
+	  height: 0;
+	  border-radius: 50%;
+	  background: rgba(255, 255, 255, 0.4);
+	  -webkit-transform: scale(0);
+	  -ms-transform: scale(0);
+	  transform: scale(0);
+	  position: absolute;
+	  opacity: 1;
+	}
+
+	.rippleBtn {
+	  -webkit-animation: rippleDrop .5s linear;
+	  animation: rippleDrop .5s linear;
+	}
+
+	@-webkit-keyframes rippleDrop {  
+	   100% {
+	     -webkit-transform: scale(2);
+	     transform: scale(2);
+	     opacity: 0;
+	   }
+	}
+
+	@keyframes rippleDrop {  
+	   100% {
+	     -webkit-transform: scale(2);
+	     transform: scale(2);
+	     opacity: 0;
+	   }
+	}
+
+}
+</style>
+</head>
+<body>
+
+<nav id="nav-header">
+      <ul>
+	  	 <li>HOME</li>
+	 	 <li>SOBRE NÓS</li>
+	  	 <li>CONTATO</li>
+	 	 <li class="slider"></li>
+	  </ul>
+</nav>   
+
+<script>
+  
+// 1 - Capturando a ação de click da UL e executando a função
+$("ul li").click(function(e) {
+
+  // 2 - ADD movimento ao slider 
+
+	  // Verificando se a tab estava pressionada
+	  // * O metodo "index" me retorna um inteiro com base na posicação do elemento clicado
+	  var tabreference = $(this).index();
+
+	  // Efeito de deslizamento - 160px da largura do elemento x a posição do clique
+	  var sliding = 160 * tabreference;
+
+	  // A nova posição do slider será baseada no valor da var anterior
+	  $(".slider").css({
+	    left: sliding + "px"
+	  });
+
+  // 3 - Efeito Ripple button
+
+  	  // Remove as ações anteriores do ripple
+  	  $(".ripple").remove();
+
+	  // Configurações
+	  // o metodo offset envia coordenadas dos elementos, neste caso as posições do clique
+	  var posX = $(this).offset().left,
+	      posY = $(this).offset().top,
+	      buttonWidth = $(this).width(),
+	      buttonHeight = $(this).height();
+
+	  // Add the element
+	  // o metodo prepend funciona como um "before" do CSS3
+	  $(this).prepend("<span class='ripple'></span>");
+
+	  // Fazendo o efeito ficar dinâmico
+	  if (buttonWidth >= buttonHeight) {
+	    buttonHeight = buttonWidth;
+	  } else {
+	    buttonWidth = buttonHeight;
+	  }
+
+	  // Capturar o centro do elemento
+	  var x = e.pageX - posX - buttonWidth / 2;
+	  var y = e.pageY - posY - buttonHeight / 2;
+
+	  // Add os novos atribuidos ao efeito ripple
+	  $(".ripple").css({
+	    width: buttonWidth,
+	    height: buttonHeight,
+	    top: y + 'px',
+	    left: x + 'px'
+	  }).addClass("rippleBtn");
+});
+
+</script>
+</body>
